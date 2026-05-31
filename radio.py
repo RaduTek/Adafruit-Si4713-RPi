@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 
 from time import sleep
 from Adafruit_Si4713 import Adafruit_Si4713
@@ -8,14 +8,14 @@ POWER = 90
 
 def printInfo():
 	radio.readASQ()
-	print "ASQ:", hex(radio.currASQ), "- InLevel:", radio.currInLevel, "dBfs -",
+	print("ASQ:", hex(radio.currASQ), "- InLevel:", radio.currInLevel, "dBfs -", end=" ")
 	radio.readTuneStatus()
-	print "Power:", radio.currdBuV, "dBuV - ANTcap:", radio.currAntCap, "- Noise level:", radio.currNoiseLevel
+	print("Power:", radio.currdBuV, "dBuV - ANTcap:", radio.currAntCap, "- Noise level:", radio.currNoiseLevel)
 
 radio = Adafruit_Si4713()
 
 if not radio.begin():
-	print "error! couldn't begin!"
+	print("error! couldn't begin!")
 
 else:
 

@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 # v.1.0
 # Code reused from Adafruit's example code and Hansipete's original code
 # Converted into a reusable class by djazz
@@ -102,7 +102,7 @@ class Adafruit_Si4713(Adafruit_I2C):
 
 		self.powerUp()
 
-		if self.getRev() is not 13:
+		if self.getRev() != 13:
 			return False
 
 		return True
@@ -156,7 +156,7 @@ class Adafruit_Si4713(Adafruit_I2C):
 		response = 0
 		while True:
 			response = self.getStatus()
-			if response is -1:
+			if response == -1:
 				self.restart()
 				return
 			if waitForByte == 0 and response != 0:
@@ -206,12 +206,12 @@ class Adafruit_Si4713(Adafruit_I2C):
 		self.setProperty(self.SI4713_PROP_TX_ACOMP_GAIN, 5) # dB
 
 	def getRev(self):
-		if self.sendCommand(self.SI4710_CMD_GET_REV, [0x00]) is -1:
+		if self.sendCommand(self.SI4710_CMD_GET_REV, [0x00]) == -1:
 			self.restart()
 			return
 
 		response = self.bus.readList(0x00, 9)
-		if response is -1:
+		if response == -1:
 			self.restart()
 			return
 
@@ -227,7 +227,7 @@ class Adafruit_Si4713(Adafruit_I2C):
 	def tuneFM(self, freq):
 		self._freq = freq
 		res = self.sendCommand(self.SI4710_CMD_TX_TUNE_FREQ, [0, freq >> 8, freq & 0xff])
-		if res is -1:
+		if res == -1:
 			self.restart()
 		else:
 			self.waitStatus(0x81)
@@ -235,17 +235,17 @@ class Adafruit_Si4713(Adafruit_I2C):
 	def setTXpower(self, power, antcap = 0):
 		self._power = power
 		res = self.sendCommand(self.SI4710_CMD_TX_TUNE_POWER, [0, 0, power, antcap])
-		if res is -1:
+		if res == -1:
 			self.restart()
 
 	def readASQ(self):
 		res = self.sendCommand(self.SI4710_CMD_TX_ASQ_STATUS, [0x1])
-		if res is -1:
+		if res == -1:
 			self.restart()
 			return
 
 		response = self.bus.readList(0x00, 5)
-		if response is -1:
+		if response == -1:
 			self.restart()
 			return
 
@@ -315,7 +315,7 @@ class Adafruit_Si4713(Adafruit_I2C):
 		stationName = [' ',' ',' ',' ', ' ',' ',' ',' ', ' ',' ',' ',' ', ' ',' ',' ',' ']
 
 		# calc number of slots needed
-		slots = (len(s)+3) / 4
+		slots = (len(s)+3) // 4
 
 		i = 0
 		for char in s:
@@ -334,7 +334,7 @@ class Adafruit_Si4713(Adafruit_I2C):
 		bufferArray = [' ',' ',' ',' ', ' ',' ',' ',' ', ' ',' ',' ',' ', ' ',' ',' ',' ', ' ',' ',' ',' ', ' ',' ',' ',' ', ' ',' ',' ',' ', ' ',' ',' ',' ']
 
 		# calc number of slots needed
-		slots = (len(s)+3) / 4
+		slots = (len(s)+3) // 4
 
 		i = 0
 		for char in s:
@@ -368,7 +368,7 @@ if __name__ == '__main__':
 
 	radio = Adafruit_Si4713()
 	if not radio.begin():
-		print "error! couldn't begin!"
+		print("error! couldn't begin!")
 
 	else:
 
@@ -382,7 +382,7 @@ if __name__ == '__main__':
 
 		radio.readTuneMeasure(FMSTATION)
 		radio.readTuneStatus()
-		print "Power:", radio.currdBuV, "dBuV - ANTcap:", radio.currAntCap, "- Noise level:", radio.currNoiseLevel
+		print("Power:", radio.currdBuV, "dBuV - ANTcap:", radio.currAntCap, "- Noise level:", radio.currNoiseLevel)
 
 		radio.setTXpower(POWER)
 		radio.tuneFM(FMSTATION)
@@ -395,9 +395,9 @@ if __name__ == '__main__':
 		while True:
 
 			radio.readASQ()
-			print "ASQ:", hex(radio.currASQ), "- InLevel:", radio.currInLevel, "dBfs -",
+			print("ASQ:", hex(radio.currASQ), "- InLevel:", radio.currInLevel, "dBfs -", end=" ")
 			radio.readTuneStatus()
-			print "Power:", radio.currdBuV, "dBuV - ANTcap:", radio.currAntCap, "- Noise level:", radio.currNoiseLevel
+			print("Power:", radio.currdBuV, "dBuV - ANTcap:", radio.currAntCap, "- Noise level:", radio.currNoiseLevel)
 
 
 			sleep(2)
